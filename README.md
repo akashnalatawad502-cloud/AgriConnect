@@ -1,129 +1,96 @@
-# MediCare AI – Smart Healthcare Assistant
+# AgriConnect
 
-A Flask, SQLite, HTML, CSS, and JavaScript student-project prototype for general health education. It includes an optional Groq-powered chat assistant, sample health and medicine information, fictional care-directory entries, appointment enquiries, saved articles, and a local demo dashboard.
+A beginner-friendly Flask + MongoDB starter for a farmer support and agricultural marketplace website.
 
-> **Medical safety:** This project is not clinically validated and is not suitable for diagnosis, treatment, or real patient care. AI and page content provide general information only; they can be incomplete or inaccurate. They do not replace advice from a qualified healthcare professional. For severe or potentially life-threatening symptoms, contact your local emergency number or seek emergency care now.
+## Prerequisites
 
-## Requirements
-
-- Windows 10/11
 - Python 3.10 or newer
-- Internet connection to install packages and, optionally, use the Groq API
-- A Groq API key only if you want to use live AI responses
+- MongoDB Community Server running locally, or a MongoDB Atlas connection URI
+- VS Code with Python support
 
-## Setup in VS Code (Windows PowerShell)
+## 1. Open the project
 
-1. Open the `medicare_ai` folder in VS Code.
-2. Open **Terminal → New Terminal** and run:
+Extract the `AgriConnect` folder and open it in VS Code.
 
-   ```powershell
-   py -m venv .venv
-   .\.venv\Scripts\Activate.ps1
-   python -m pip install --upgrade pip
-   pip install -r requirements.txt
-   ```
+## 2. Create and activate a virtual environment
 
-   If PowerShell blocks activation, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` in that terminal, then activate again. Alternatively, use Command Prompt:
+Windows PowerShell:
 
-   ```bat
-   .venv\Scripts\activate.bat
-   ```
-
-3. Create your local environment file from the example:
-
-   ```powershell
-   Copy-Item .env.example .env
-   ```
-
-4. Open `.env` in VS Code. Set `FLASK_SECRET_KEY` to a long random value. To make one in PowerShell:
-
-   ```powershell
-   python -c "import secrets; print(secrets.token_hex(32))"
-   ```
-
-   Paste the generated value after `FLASK_SECRET_KEY=`. Add your own Groq API key after `GROQ_API_KEY=` to enable the chatbot. The key is read by Flask on the server and is never sent to the browser. You can leave it unset to use the rest of the site; the chat page will explain that AI is not configured.
-
-5. Initialize the SQLite database:
-
-   ```powershell
-   flask --app app init-db
-   ```
-
-   The `database.db` file is created locally and excluded from Git.
-
-6. Start the development server:
-
-   ```powershell
-   flask --app app run --debug
-   ```
-
-7. Open **http://127.0.0.1:5000/** in your browser.
-
-`flask run --debug` enables Flask's development debugger. Use it only for local development, not for a public deployment. The application can also be started with `python app.py`; debug mode is off by default.
-
-## Pages and features
-
-- Home page with a fictional demo hospital illustration and MediCare AI logo, local demo search results, and direct searches on MedlinePlus, a service of the U.S. National Library of Medicine
-- AI assistant with browser-session chat history stored locally in SQLite, loading state, clear-chat action, emergency-response guidance, and helpful configuration/service errors
-- Common symptom and medicine information searches; symptom results include relevant general-use medicine guide entries where available, without personalized treatment or dose recommendations
-- Clearly identified, fictional hospital/clinic entries and demo doctor profiles with illustrated portraits and sample qualifications
-- Opt-in browser location permission on the hospital page, with an optional Google Maps handoff and city searches for Belagavi, Hubballi, Dharwad, and Bengaluru; fictional directory entries are not presented as nearby verified hospitals
-- Appointment enquiry form saved in SQLite
-- Health-tip articles saved to and removed from the demo dashboard
-- About, local contact-message form, privacy explanation, and safety disclaimers
-- Responsive navigation menu, accessible form labels, reduced-motion support, and security headers
-
-All non-AI forms and chat endpoints use session-based CSRF checks. Appointment dates and allowed specialties are validated server-side, and SQLite queries are parameterized. Location is requested only after the visitor presses the hospital page's location button; it is not saved or sent to this app's server. Coordinates are shared with Google Maps only if the visitor separately chooses to open the map link.
-
-The demo dashboard does not use real authentication: it displays entries associated with one fixed demo user. Use fictional details only. Recent chat messages are associated with a random browser-session identifier, can be cleared in the chat UI, and are automatically pruned after one day.
-
-## Environment settings
-
-| Variable | Purpose |
-| --- | --- |
-| `FLASK_SECRET_KEY` | Secret key for signed Flask sessions. Set a unique random value in `.env`. |
-| `GROQ_API_KEY` | Optional Groq API key for live AI responses. Never put this in frontend code. |
-| `GROQ_MODEL` | Optional Groq model identifier; defaults to `llama-3.3-70b-versatile`. |
-| `COOKIE_SECURE` | Set to `true` only when serving over HTTPS. Keep `false` for localhost. |
-
-`.env` and the SQLite database are ignored by Git. If `FLASK_SECRET_KEY` is missing, the app generates a temporary key and warns that sessions reset after restart.
-
-## Troubleshooting
-
-- **`py` is not recognized:** Install Python from [python.org](https://www.python.org/downloads/) and enable **Add python.exe to PATH**, then reopen VS Code.
-- **Virtual environment activation is blocked:** Use the process-scoped PowerShell policy command above, or activate from Command Prompt.
-- **`ModuleNotFoundError`:** Activate `.venv` and run `pip install -r requirements.txt` again.
-- **AI says it is not configured:** Confirm `.env` exists beside `app.py`, contains `GROQ_API_KEY=...`, and restart Flask after editing it.
-- **AI service unavailable:** Check the API key, Groq account/model availability, internet access, and terminal logs. The non-AI pages work without the Groq service.
-- **Database/table errors:** Run `flask --app app init-db` from the `medicare_ai` directory.
-- **Form security check failed:** Refresh the page and submit again so the browser has a current session token.
-- **Port 5000 is busy:** Run `flask --app app run --debug --port 5001` and open [`http://127.0.0.1:5000/`.](http://127.0.0.1:5000/)
-
-## Project layout
-
-```text
-medicare_ai/
-├── app.py
-├── requirements.txt
-├── .env.example
-├── .gitignore
-├── database.db              # generated locally; ignored by Git
-├── templates/
-│   ├── base.html
-│   ├── index.html
-│   ├── ai_assistant.html
-│   ├── symptoms.html
-│   ├── medicines.html
-│   ├── hospitals.html
-│   ├── doctors.html
-│   ├── appointments.html
-│   ├── health_tips.html
-│   ├── dashboard.html
-│   └── about.html
-├── static/
-│   ├── css/style.css
-│   └── js/main.js
-└── images/                  # reserved for local project imagery
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-The prototype intentionally uses fictional directory entries and recommends trusted local sources for real provider details. It does not implement real authentication, bookings, clinical workflows, or emergency dispatch.
+If PowerShell blocks activation, you can run the environment's Python directly:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe app.py
+```
+
+Or use Command Prompt:
+
+```bat
+.venv\Scripts\activate.bat
+```
+
+## 3. Install dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+## 4. Configure environment variables
+
+Copy `.env.example` to a new file named `.env`. Change `SECRET_KEY` to a long random value. For local MongoDB, the default URI is usually:
+
+```text
+mongodb://localhost:27017/
+```
+
+Never commit `.env` to a public repository.
+
+For card checkout, add your Stripe test secret key to `STRIPE_SECRET_KEY` in `.env`. Use Stripe's test keys while developing; card checkout remains unavailable until a key is configured. Card details are entered only on Stripe-hosted Checkout and are never stored by AgriConnect. Cash on delivery does not require Stripe.
+
+For order confirmation SMS, copy the Twilio account SID, auth token, and SMS-capable sender number from your Twilio account into `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_FROM_NUMBER` in `.env` (the variable names are included in `.env.example`). Set `PUBLIC_BASE_URL` to the public HTTPS address of the deployed site so texted tracking links work outside the local machine. Restart the Flask server after editing `.env`. The SMS destination is the phone entered in delivery details; Indian 10-digit mobile numbers are sent with the `+91` country code, while numbers entered with `+` retain their country code. Never commit credentials or share them in chat. If Twilio is not configured or rejects a message, the order remains confirmed and the site clearly reports that no SMS was sent; order confirmation is not dependent on the SMS provider.
+
+For Farmer Assist, add your NVIDIA NIM API key to `NVIDIA_KEY` in `.env` (`NVIDIA_API_KEY` is also accepted). The app uses NVIDIA's OpenAI-compatible chat completions endpoint and defaults to `deepseek-ai/deepseek-v4-flash`; if that model returns HTTP 410 Gone, it retries once with `meta/llama-3.3-70b-instruct`. Set `NVIDIA_MODEL` to an exact model ID enabled for your NVIDIA API key if needed. Crop image analysis accepts JPEG, PNG, and WebP images up to 3 MB; configure `NVIDIA_VISION_MODEL` to a vision-capable model enabled for your key (the suggested default is `meta/llama-3.2-90b-vision-instruct`). Image attachments are sent to NVIDIA for that request and are not saved by AgriConnect. If a model returns an error, confirm the model is available to your NVIDIA account in the NVIDIA API Catalog. The key is used server-side and is never sent to the browser. The chat is available only to accounts registered with the Farmer role and retains a rolling window of recent text messages so the conversation can continue through repeated questions. Existing accounts without a saved role are treated as customers. The assistant can respond to general questions as well as farming topics; its answers, including image analysis, can be inaccurate and must not replace qualified medical, legal, financial, or local agricultural advice.
+
+## 5. Start MongoDB
+
+Make sure your MongoDB service is running. If you use MongoDB Atlas, put your Atlas connection URI in `.env` and allow your development IP in Atlas network access settings.
+
+## 6. Add sample data (optional)
+
+```bash
+python -m database.sample_data
+```
+
+## 7. Run the site
+
+```bash
+python app.py
+```
+
+Open http://127.0.0.1:5000 in your browser.
+
+Check the application and database status at http://127.0.0.1:5000/health.
+
+## Current scope
+
+The app includes email/password registration with an account-created confirmation page, sign-in with a successful sign-in confirmation, a farmer-only AI problem-search assistant, a session-based shopping cart, cash-on-delivery orders, and Stripe-hosted card checkout. Checkout collects a delivery address for either payment method, and the confirmation page shows the submitted address after a successful order. Signed-in customers can use My Orders to review purchases and open a fulfillment-status timeline; it displays order stages, not a live GPS location. The fulfillment status is stored on each order and can be advanced by the order operator. Accounts and COD orders are stored in local SQLite (`instance/accounts.sqlite3`) when MongoDB is unavailable; set `ACCOUNT_DB_PATH` to choose a different location. MongoDB remains needed for persistent marketplace listings and paid card order storage. Add sample crops and products with `python -m database.sample_data`.
+
+The marketplace includes sample crop listings grouped by cereals, fruits, oilseeds, pulses, and vegetables, with a category dropdown. Agricultural essentials have a second dropdown grouping seeds, electric kits, irrigation, and sowing equipment together, with separate fertilizer and agro-item groups; each group has at least four sample products. Sample product and crop illustrations are served locally. Crop price cards show **simulated illustrative quotes**, not a live exchange feed or financial data. Product catalog prices are the listed checkout prices. English, Hindi, and Kannada can be selected from the language menu.
+
+Farmer Assist provides AI-generated general agricultural information, not a diagnosis or a substitute for local extension services. Confirm pesticide and other chemical use against the registered product label and a local expert. Seek qualified help for urgent illness or poisoning.
+
+Do not expose the Flask development server to the public internet. Before production, configure HTTPS, strong secret and provider keys, Stripe live keys and webhooks, and appropriate account/order policies.
+
+## Notes
+
+- The hero photo uses a remote image URL, so internet access is needed to display it.
+- Bootstrap is loaded from a CDN.
+- MongoDB can be unavailable and the homepage still renders, but `/health` reports the database as unavailable.
+- Replace placeholder content and validate all business rules before production deployment.
+- Run the route tests with `.venv\Scripts\python.exe -m unittest discover -s tests -v`.
+
