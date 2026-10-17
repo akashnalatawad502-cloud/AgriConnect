@@ -74,7 +74,7 @@ python app.py
 
 Open http://127.0.0.1:5000 in your browser.
 
-Check the application and database status at http://127.0.0.1:5000/health.
+Check the application and database status at http://127.0.0.1:5000.
 
 ## Current scope
 
