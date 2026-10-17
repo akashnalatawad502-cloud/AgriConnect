@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run AgriConnect Flask app",
+			"type": "shell",
+			"command": "py",
+			"args": [
+				"AgriConnect01\\app.py"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}
